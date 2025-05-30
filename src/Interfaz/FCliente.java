@@ -1,14 +1,13 @@
 package Interfaz;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import Persona.Cliente;
 import Tiquetes.Factura;
 import Tiquetes.FastPass;
 import Tiquetes.Tiquete;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class FCliente extends JFrame implements ActionListener {
     
@@ -23,13 +22,11 @@ public class FCliente extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Panel superior con nombre y login
         JPanel panelSuperior = new JPanel(new GridLayout(2, 1));
         panelSuperior.add(new JLabel("Bienvenido: " + cliente.getNombre()));
         panelSuperior.add(new JLabel("Usuario: " + cliente.getLogin()));
         add(panelSuperior, BorderLayout.NORTH);
 
-        // Panel central con botones
         JPanel panelCentral = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JButton botonHistorial = new JButton("Ver historial de compras");
@@ -42,11 +39,9 @@ public class FCliente extends JFrame implements ActionListener {
 
         add(panelCentral, BorderLayout.CENTER);
 
-        // Botón cerrar sesión
         JButton botonCerrarSesion = new JButton("Cerrar sesión");
         add(botonCerrarSesion, BorderLayout.SOUTH);
 
-        // Acciones
         botonHistorial.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,8 +55,7 @@ public class FCliente extends JFrame implements ActionListener {
 
         botonCerrarSesion.addActionListener(e -> {
             dispose();
-            // Podrías volver al login aquí si lo deseas
-            // new VentanaLogin();
+            new FLogin();
         });
 
         setVisible(true);
