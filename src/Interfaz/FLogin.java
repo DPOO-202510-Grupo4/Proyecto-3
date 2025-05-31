@@ -1,19 +1,17 @@
 
 package Interfaz;
 
-import Persona.GestorPersonas;
-import Persona.GestorPersonas.TipoUsuario;
+import Persona.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import Persona.*;
 
 public class FLogin extends JFrame implements ActionListener{
     
     public FLogin() {
 
         setTitle("Iniciar Sesión");
-        setSize(350, 220);
+        setSize(700, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 

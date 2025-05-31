@@ -20,7 +20,7 @@ public class FCliente extends JFrame implements ActionListener {
         this.cliente = cliente;
 
         setTitle("Panel del Cliente");
-        setSize(600, 400);
+        setSize(700, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(6, 1, 10, 10));

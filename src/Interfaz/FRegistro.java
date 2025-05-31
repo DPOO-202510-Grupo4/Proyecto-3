@@ -15,7 +15,7 @@ public class FRegistro extends JFrame implements ActionListener{
 
     public FRegistro() {
         setTitle("Registro de Cliente");
-        setSize(400, 300);
+        setSize(700, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridLayout(6, 2, 10, 10));

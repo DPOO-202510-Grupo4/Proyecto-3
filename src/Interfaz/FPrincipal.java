@@ -1,36 +1,67 @@
 package Interfaz;
 
+import Persistencias.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-import Persona.*;
-import Persistencias.*;
 
 
 public class FPrincipal extends JFrame implements ActionListener{
 
         public FPrincipal() {
         setTitle("Parque de Atracciones - Bienvenido");
-        setSize(400, 200);
+        setSize(500, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 1, 10, 10));
+        panel.setBackground(new Color(255, 255, 255));
+        panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        JLabel titulo = new JLabel("Bienvenido al Parque de Atracciones", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 16));
-        panel.add(titulo);
+        JPanel panelImagen = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelImagen.setBackground(new Color(255, 255, 255));
+        ImageIcon iconoOriginal = new ImageIcon("img/Title.png");
+        Image imagen = iconoOriginal.getImage();
+
+        int anchoOriginal = iconoOriginal.getIconWidth();
+        int altoOriginal = iconoOriginal.getIconHeight();
+
+        int maxAncho = 400;
+        double escala = (double) maxAncho / anchoOriginal;
+
+        int nuevoAncho = (int) (anchoOriginal * escala);
+        int nuevoAlto = (int) (altoOriginal * escala);
+
+        Image imagenEscalada = imagen.getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+
+        JLabel etiquetaImagen = new JLabel(iconoEscalado);
+        panelImagen.add(etiquetaImagen);
+
+        add(panelImagen, BorderLayout.NORTH);
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setBackground(new Color(255, 255, 255));
 
         JButton btnLogin = new JButton("Iniciar sesión");
-        JButton btnRegistro = new JButton("Registrarse como cliente");
+        JButton btnRegistro = new JButton("Registrarse");
 
-        panel.add(btnLogin);
-        panel.add(btnRegistro);
+        Dimension tamañoBoton = new Dimension(150, 40);
+        btnLogin.setPreferredSize(tamañoBoton);
+        btnRegistro.setPreferredSize(tamañoBoton);
 
-        add(panel);
+        btnLogin.setBackground(new Color(202, 252, 5));
+        btnLogin.setOpaque(true);
+        btnLogin.setFocusPainted(false);
+
+        btnRegistro.setBackground(new Color(202, 252, 5));
+        btnRegistro.setOpaque(true);
+
+        panelBotones.add(btnLogin);
+        panelBotones.add(btnRegistro);
+
+        add(panelBotones, BorderLayout.CENTER);
 
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
