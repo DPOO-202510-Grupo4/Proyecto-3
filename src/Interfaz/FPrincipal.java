@@ -9,10 +9,11 @@ import javax.swing.*;
 public class FPrincipal extends JFrame implements ActionListener{
 
         public FPrincipal() {
-        setTitle("Parque de Atracciones - Bienvenido");
+        setTitle("Nebula Park");
         setSize(500, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("img/TitleBG.png"));
 
         JPanel panel = new JPanel();
         panel.setBackground(new Color(255, 255, 255));
