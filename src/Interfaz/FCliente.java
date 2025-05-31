@@ -22,6 +22,7 @@ public class FCliente extends JFrame implements ActionListener {
         setTitle("Panel del Cliente");
         setSize(700, 500);
         setLocationRelativeTo(null);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("img/TitleBG.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(6, 1, 10, 10));
 

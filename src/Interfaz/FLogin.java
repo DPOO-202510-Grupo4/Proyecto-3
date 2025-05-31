@@ -14,6 +14,7 @@ public class FLogin extends JFrame implements ActionListener{
         setSize(400, 250);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("img/TitleBG.png"));
 
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
