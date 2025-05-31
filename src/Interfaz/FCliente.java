@@ -1,6 +1,5 @@
 package Interfaz;
 
-
 import Atracciones.*;
 import Persona.*;
 import Tiquetes.*;
@@ -11,16 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.*;
 import restricciones.*;
-
-import com.google.zxing.*;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 
 
 public class FCliente extends JFrame implements ActionListener {
@@ -58,7 +47,6 @@ public class FCliente extends JFrame implements ActionListener {
         btnConsultarTiquetes.addActionListener(e -> mostrarTiquetes());
         btnConsultarEspectaculos.addActionListener(e -> mostrarEspectaculos());
         btnConsultarAtracciones.addActionListener(e -> mostrarAtracciones());
-        btnImprimirTiquetes.addActionListener(e -> imprimirTiquetes());
         btnCerrarSesion.addActionListener(e -> {
             dispose();
             new FLogin();
@@ -76,47 +64,75 @@ public class FCliente extends JFrame implements ActionListener {
             return;
         }
 
-        String[] opciones = {"Regular", "Temporada"};
-        int tipo = JOptionPane.showOptionDialog(this, "Tipo de tiquete:",
-                "Compra", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
-                null, opciones, opciones[0]);
-
+        String[] tipos = {"Regular", "Temporada"};
+        int tipo = JOptionPane.showOptionDialog(this, "Tipo de tiquete:", "Compra",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, tipos, tipos[0]);
         if (tipo == -1) return;
 
-        String[] nombresCategorias = categorias.stream().map(CategoriaTiquete::getNombre).toArray(String[]::new);
-        String categoria = (String) JOptionPane.showInputDialog(this, "Seleccione una categoría:",
-                "Categoría", JOptionPane.QUESTION_MESSAGE, null, nombresCategorias, nombresCategorias[0]);
+        ArrayList<String> nombresCategorias = new ArrayList<>();
+        for (CategoriaTiquete cat : categorias) {
+            if (tipo == 1 && cat.getNombre().equalsIgnoreCase("Básico")) {
+                continue;
+            }
+            nombresCategorias.add(cat.getNombre());
+        }
 
+        if (nombresCategorias.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay categorías disponibles para este tipo.");
+            return;
+        }
+
+        String[] opcionesCategorias = nombresCategorias.toArray(new String[0]);
+        String categoria = (String) JOptionPane.showInputDialog(this, "Seleccione categoría:",
+                "Categoría", JOptionPane.QUESTION_MESSAGE, null, opcionesCategorias, opcionesCategorias[0]);
         if (categoria == null) return;
 
-        if (tipo == 0) { 
+        if (tipo == 0) { // Regular
             String fechaStr = JOptionPane.showInputDialog(this, "Ingrese fecha (dd/MM/yyyy):");
             if (fechaStr == null) return;
+
             try {
                 Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaStr);
                 gestor.crearTiqueteRegular(cliente, categoria, fecha);
                 JOptionPane.showMessageDialog(this, "¡Tiquete regular creado!");
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Fecha inválida.");
             }
-        } else { 
+
+        } else { // Temporada
             ArrayList<Temporada> temporadas = gestor.getTemporadas();
+
             if (temporadas.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No hay temporadas.");
+                JOptionPane.showMessageDialog(this, "No hay temporadas disponibles.");
                 return;
             }
 
-            String[] nombresTemp = temporadas.stream().map(Temporada::getName).toArray(String[]::new);
-            String seleccion = (String) JOptionPane.showInputDialog(this, "Seleccione temporada:",
-                    "Temporada", JOptionPane.QUESTION_MESSAGE, null, nombresTemp, nombresTemp[0]);
+            ArrayList<String> nombresTemporadas = new ArrayList<>();
+            for (Temporada t : temporadas) {
+                nombresTemporadas.add(t.getName());
+            }
 
+            String[] opcionesTemporadas = nombresTemporadas.toArray(new String[0]);
+            String seleccion = (String) JOptionPane.showInputDialog(this, "Seleccione temporada:",
+                    "Temporada", JOptionPane.QUESTION_MESSAGE, null, opcionesTemporadas, opcionesTemporadas[0]);
             if (seleccion == null) return;
 
-            Temporada temporada = temporadas.stream().filter(t -> t.getName().equals(seleccion)).findFirst().get();
-            gestor.crearTiqueteTemporada(cliente, categoria, temporada);
+            Temporada temporadaSeleccionada = null;
+            for (Temporada t : temporadas) {
+                if (t.getName().equals(seleccion)) {
+                    temporadaSeleccionada = t;
+                    break;
+                }
+            }
+
+            if (temporadaSeleccionada == null) return;
+
+            gestor.crearTiqueteTemporada(cliente, categoria, temporadaSeleccionada);
             JOptionPane.showMessageDialog(this, "¡Tiquete de temporada creado!");
         }
     }
+
 
     private void mostrarTiquetes() {
         ArrayList<Tiquete> tiquetes = cliente.getTiquetes();
@@ -181,65 +197,6 @@ public class FCliente extends JFrame implements ActionListener {
 
         JOptionPane.showMessageDialog(this, sb.toString());
     }
-
-    private void imprimirTiquetes() {
-    ArrayList<Tiquete> tiquetes = cliente.getTiquetes();
-
-    if (tiquetes.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No tiene tiquetes para imprimir.");
-        return;
-    }
-
-    for (Tiquete t : tiquetes) {
-        if (t.isImpreso()) {
-            int confirm = JOptionPane.showConfirmDialog(this,
-                "El tiquete con ID " + t.getId() + " ya fue impreso. ¿Desea reimprimirlo?",
-                "Reimpresión", JOptionPane.YES_NO_OPTION);
-            if (confirm != JOptionPane.YES_OPTION) continue;
-        }
-
-        String tipo;
-        if (t instanceof TiqueteTemporada) {
-            tipo = "Temporada";
-        } else if (t instanceof TiqueteRegular) {
-            tipo = "Regular";
-        } else {
-            tipo = "Desconocido";
-        }
-
-        String id = t.getId();
-        String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-        String qrContenido = "Tipo: " + tipo + ", ID: " + id + ", Fecha: " + fecha;
-
-        try {
-            int width = 200;
-            int height = 200;
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(qrContenido, BarcodeFormat.QR_CODE, width, height);
-            BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
-
-            JFrame frame = new JFrame("Tiquete " + id);
-            frame.setSize(300, 400);
-            frame.setLayout(new BorderLayout());
-
-            JTextArea texto = new JTextArea("Tipo: " + tipo + "\nID: " + id + "\nFecha: " + fecha);
-            texto.setEditable(false);
-            texto.setFont(new Font("Arial", Font.PLAIN, 14));
-
-            JLabel qrLabel = new JLabel(new ImageIcon(qrImage));
-            qrLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-            frame.add(texto, BorderLayout.NORTH);
-            frame.add(qrLabel, BorderLayout.CENTER);
-            frame.setVisible(true);
-
-            t.setImpreso(true);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al generar QR para el tiquete " + id);
-        }
-    }
-}
 
     @Override
     public void actionPerformed(ActionEvent e) {

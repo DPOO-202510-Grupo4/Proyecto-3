@@ -1,13 +1,5 @@
 package Tiquetes;
 
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
-import Atracciones.Atraccion;
 import Persistencias.PersistenciaCategoriaTiquete;
 import Persistencias.PersistenciaTemporada;
 import Persistencias.PersistenciaTiqueteFastPass;
@@ -15,6 +7,11 @@ import Persistencias.PersistenciaTiqueteRegular;
 import Persistencias.PersistenciaTiqueteTemporada;
 import Persona.Cliente;
 import Persona.GestorPersonas;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 import restricciones.Temporada;
 
 public class GestorTiquetes {
@@ -33,6 +30,7 @@ public class GestorTiquetes {
         this.tiquetesVendidos = new HashMap<>();
         this.categoriasDisponibles = new ArrayList<>();
         this.temporadas = new ArrayList<>();
+        inicializarCategoriasPorDefecto();
     }
 
     public static GestorTiquetes getInstancia() {
@@ -318,4 +316,23 @@ public class GestorTiquetes {
         }
         return instancia;
     }
+
+    private void inicializarCategoriasPorDefecto() {
+    if (categoriasDisponibles.isEmpty()) {
+        ArrayList<String> sinAcceso = new ArrayList<>();
+        ArrayList<String> familiar = new ArrayList<>();
+        ArrayList<String> oro = new ArrayList<>();
+        ArrayList<String> diamante = new ArrayList<>();
+
+        // Llenar listas con las atracciones a las que se tiene acceso
+
+        categoriasDisponibles.add(new CategoriaTiquete("Básico", sinAcceso, 10000.0));
+        categoriasDisponibles.add(new CategoriaTiquete("Familiar", familiar, 30000.0));
+        categoriasDisponibles.add(new CategoriaTiquete("Oro", oro, 45000.0));
+        categoriasDisponibles.add(new CategoriaTiquete("Diamante", diamante, 60000.0));
+    }
 }
+
+}
+
+

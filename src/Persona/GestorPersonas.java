@@ -1,13 +1,12 @@
 package Persona;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import Atracciones.Atraccion;
 import Persistencias.PersistenciaAdministrador;
 import Persistencias.PersistenciaCliente;
 import Persistencias.PersistenciaEmpleado;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GestorPersonas {
 
@@ -171,6 +170,7 @@ public class GestorPersonas {
     public HashMap<String, Cliente> getClientes() {
         return clientes;
     }
+
 
     //------------------------ ADMINISTRADORES ------------------------
 

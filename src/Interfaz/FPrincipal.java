@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import Persona.*;
+import Persistencias.*;
+
 
 public class FPrincipal extends JFrame implements ActionListener{
 
@@ -47,6 +50,7 @@ public class FPrincipal extends JFrame implements ActionListener{
     }
 
     public static void main(String[] args) {
+        PersistenciaCliente.cargarDatos();
         new FPrincipal();
     }
 
