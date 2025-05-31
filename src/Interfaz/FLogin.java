@@ -11,7 +11,7 @@ public class FLogin extends JFrame implements ActionListener{
     public FLogin() {
 
         setTitle("Iniciar Sesión");
-        setSize(700, 500);
+        setSize(400, 250);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
