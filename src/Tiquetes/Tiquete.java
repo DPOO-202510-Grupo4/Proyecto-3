@@ -6,6 +6,8 @@ public abstract class Tiquete extends ItemVenta{
 	protected String idTiquete;
 	protected CategoriaTiquete categoria;
 	protected boolean usado;
+	private boolean impreso = false;
+
 
 	private String dueño;
 	
@@ -60,6 +62,13 @@ public abstract class Tiquete extends ItemVenta{
 		return dueño;
 	}
 
+	public boolean isImpreso() {
+    	return impreso;
+	}
+
+	public void setImpreso(boolean impreso) {
+    	this.impreso = impreso;
+	}
 
 	
 }

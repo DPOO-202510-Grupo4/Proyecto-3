@@ -1,15 +1,17 @@
 package Persona;
-import java.util.ArrayList;
-
 import Tiquetes.Factura;
 import Tiquetes.FastPass;
 import Tiquetes.Tiquete;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Cliente extends Persona {
 	
 	public ArrayList<Factura> historialCompras;
 	public ArrayList<Tiquete> tiquetes;
-	public ArrayList<FastPass> fastPass;
+	public ArrayList<FastPass> fastPass;// Cliente.java
+	private HashSet<String> tiquetesImpresos = new HashSet<>();
+
 	
 	public Cliente(String nombre, String login, String password, String fechaNacimiento) {
 	    super(nombre, login, password, fechaNacimiento);
@@ -45,6 +47,14 @@ public class Cliente extends Persona {
 	}
 	public void setFastPass(ArrayList<FastPass> fastPass) {
 		this.fastPass = fastPass;
+	}
+
+	public boolean yaImpreso(String idTiquete) {
+    	return tiquetesImpresos.contains(idTiquete);
+	}
+
+	public void marcarComoImpreso(String idTiquete) {
+    	tiquetesImpresos.add(idTiquete);
 	}
 	
 }

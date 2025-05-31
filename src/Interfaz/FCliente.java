@@ -12,6 +12,17 @@ import java.util.*;
 import javax.swing.*;
 import restricciones.*;
 
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
+
 public class FCliente extends JFrame implements ActionListener {
     
     private Cliente cliente;
@@ -33,18 +44,21 @@ public class FCliente extends JFrame implements ActionListener {
         JButton btnConsultarTiquetes = new JButton("Consultar Tiquetes");
         JButton btnConsultarEspectaculos = new JButton("Consultar Espectáculos");
         JButton btnConsultarAtracciones = new JButton("Consultar Atracciones");
+        JButton btnImprimirTiquetes = new JButton("Imprimir Tiquetes");
         JButton btnCerrarSesion = new JButton("Cerrar sesión");
 
         add(btnComprarTiquete);
         add(btnConsultarTiquetes);
         add(btnConsultarEspectaculos);
         add(btnConsultarAtracciones);
+        add(btnImprimirTiquetes);
         add(btnCerrarSesion);
 
         btnComprarTiquete.addActionListener(e -> mostrarDialogoCompra());
         btnConsultarTiquetes.addActionListener(e -> mostrarTiquetes());
         btnConsultarEspectaculos.addActionListener(e -> mostrarEspectaculos());
         btnConsultarAtracciones.addActionListener(e -> mostrarAtracciones());
+        btnImprimirTiquetes.addActionListener(e -> imprimirTiquetes());
         btnCerrarSesion.addActionListener(e -> {
             dispose();
             new FLogin();
@@ -167,6 +181,65 @@ public class FCliente extends JFrame implements ActionListener {
 
         JOptionPane.showMessageDialog(this, sb.toString());
     }
+
+    private void imprimirTiquetes() {
+    ArrayList<Tiquete> tiquetes = cliente.getTiquetes();
+
+    if (tiquetes.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No tiene tiquetes para imprimir.");
+        return;
+    }
+
+    for (Tiquete t : tiquetes) {
+        if (t.isImpreso()) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                "El tiquete con ID " + t.getId() + " ya fue impreso. ¿Desea reimprimirlo?",
+                "Reimpresión", JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) continue;
+        }
+
+        String tipo;
+        if (t instanceof TiqueteTemporada) {
+            tipo = "Temporada";
+        } else if (t instanceof TiqueteRegular) {
+            tipo = "Regular";
+        } else {
+            tipo = "Desconocido";
+        }
+
+        String id = t.getId();
+        String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+        String qrContenido = "Tipo: " + tipo + ", ID: " + id + ", Fecha: " + fecha;
+
+        try {
+            int width = 200;
+            int height = 200;
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(qrContenido, BarcodeFormat.QR_CODE, width, height);
+            BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+
+            JFrame frame = new JFrame("Tiquete " + id);
+            frame.setSize(300, 400);
+            frame.setLayout(new BorderLayout());
+
+            JTextArea texto = new JTextArea("Tipo: " + tipo + "\nID: " + id + "\nFecha: " + fecha);
+            texto.setEditable(false);
+            texto.setFont(new Font("Arial", Font.PLAIN, 14));
+
+            JLabel qrLabel = new JLabel(new ImageIcon(qrImage));
+            qrLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+            frame.add(texto, BorderLayout.NORTH);
+            frame.add(qrLabel, BorderLayout.CENTER);
+            frame.setVisible(true);
+
+            t.setImpreso(true);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al generar QR para el tiquete " + id);
+        }
+    }
+}
 
     @Override
     public void actionPerformed(ActionEvent e) {
