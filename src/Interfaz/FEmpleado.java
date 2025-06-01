@@ -1,12 +1,10 @@
 package Interfaz;
 
+import Atracciones.*;
 import Persona.*;
 import Tiquetes.*;
-import Atracciones.*;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.*;
 
@@ -95,43 +93,50 @@ public class FEmpleado extends JFrame implements ActionListener {
     } 
 
     private void registrarVenta() {
-        ArrayList<Cliente> clientes = GestorPersonas.getInstance().getClientes();
+        GestorPersonas gestorPersonas = GestorPersonas.getInstance();
+        HashMap<String, Cliente> clientesMap = gestorPersonas.getClientes();
 
-        if (clientes.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No hay clientes disponibles.");
+        if (clientesMap.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay clientes registrados.");
             return;
         }
 
-        String[] opciones = new String[clientes.size()];
+        ArrayList<Cliente> clientes = new ArrayList<>(clientesMap.values());
+
+        String[] nombresClientes = new String[clientes.size()];
         for (int i = 0; i < clientes.size(); i++) {
-            opciones[i] = clientes.get(i).getNombre() + " (" + clientes.get(i).getLogin() + ")";
+            nombresClientes[i] = clientes.get(i).getNombre();
         }
 
-        String seleccionado = (String) JOptionPane.showInputDialog(this,
-            "Seleccione un cliente para registrar la venta:",
+        String nombreSeleccionado = (String) JOptionPane.showInputDialog(
+            this,
+            "Seleccione un cliente:",
             "Seleccionar Cliente",
             JOptionPane.QUESTION_MESSAGE,
             null,
-            opciones,
-            opciones[0]);
+            nombresClientes,
+            nombresClientes[0]
+        );
 
-        if (seleccionado == null) return;  
+        if (nombreSeleccionado == null) {
+            return;
+        }
 
         Cliente clienteSeleccionado = null;
         for (Cliente c : clientes) {
-            String nombreOLogin = c.getNombre() + " (" + c.getLogin() + ")";
-            if (nombreOLogin.equals(seleccionado)) {
+            if (c.getNombre().equals(nombreSeleccionado)) {
                 clienteSeleccionado = c;
                 break;
             }
         }
 
         if (clienteSeleccionado == null) {
-            JOptionPane.showMessageDialog(this, "Cliente no válido.");
+            JOptionPane.showMessageDialog(this, "Cliente no encontrado.");
             return;
         }
 
-        FCliente.registrarVenta(clienteSeleccionado);
+        FCliente ventanaCliente = new FCliente(clienteSeleccionado);
+        ventanaCliente.mostrarDialogoCompra();
     }
 
 
@@ -148,5 +153,10 @@ public class FEmpleado extends JFrame implements ActionListener {
             gestor.usarTiquete(t);
             JOptionPane.showMessageDialog(this, "Tiquete registrado como usado.");
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
