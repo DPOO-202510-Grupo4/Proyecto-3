@@ -81,7 +81,6 @@ public class FPrincipal extends JFrame implements ActionListener{
         setVisible(true);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         throw new UnsupportedOperationException("NA");
