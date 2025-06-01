@@ -81,9 +81,8 @@ public class FLogin extends JFrame {
             }
         });
 
-        // Acción para botón Volver
         botonVolver.addActionListener(e -> {
-            new FPrincipal();  // Tu ventana principal
+            new FPrincipal();  
             dispose();
         });
 
