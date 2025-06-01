@@ -11,7 +11,7 @@ import restricciones.Temporada;
 public class AtraccionMecanica extends Atraccion {
 
     protected String riesgo;
-    protected boolean disponible;
+    public boolean disponible;
     protected RestriccionesMecanica restricciones;
     protected ArrayList<String> empleadosAsignados;
 
