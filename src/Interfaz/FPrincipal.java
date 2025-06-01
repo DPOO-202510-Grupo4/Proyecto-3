@@ -81,10 +81,6 @@ public class FPrincipal extends JFrame implements ActionListener{
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        PersistenciaCliente.cargarDatos();
-        new FPrincipal();
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
