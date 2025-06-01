@@ -2,7 +2,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.UUID;
 
 import Persona.Cliente;
 import Persona.GestorPersonas;
@@ -58,7 +57,7 @@ class GestorTiquetesTest {
     @Test
     void testCrearFastPass() {
         Date fecha = new Date();
-        FastPass fp = gestor.crearFastPass("FastPass Día", 70000.0, fecha, false, UUID.randomUUID().toString(), cliente.getLogin());
+        FastPass fp = gestor.crearFastPass("FastPass Día", 70000.0, fecha, false, "F12345", cliente.getLogin());
         assertNotNull(fp);
         assertEquals("FastPass Día", fp.getNombre());
     }
