@@ -12,7 +12,7 @@ public class VentanaEmpleados extends JFrame {
 
     public VentanaEmpleados(Administrador administrador) {
         setTitle("Gestión de Empleados");
-        setSize(500, 400);
+        setSize(900, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -33,6 +33,21 @@ public class VentanaEmpleados extends JFrame {
         JButton btnConsultar = crearBotonEstilizado("Consultar empleado");
         JButton btnRegistrar = crearBotonEstilizado("Registrar empleado");
         JButton btnRegresar = crearBotonEstilizado("Regresar");
+
+        btnRegistrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new VentanaRegistroEmpleado(administrador); 
+                dispose(); 
+            }
+        });
+        btnConsultar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new VentanaConsultaEmpleados(administrador);
+                dispose();
+            }
+        });
 
         JPanel panelBotones = new JPanel(new GridLayout(1, 2, 10, 10));
         panelBotones.add(btnConsultar);

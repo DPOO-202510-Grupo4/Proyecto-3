@@ -83,9 +83,10 @@ public class FAdministrador extends JFrame implements ActionListener {
         } else if (source == btnAtracciones) {
             JOptionPane.showMessageDialog(this, "Abrir módulo de atracciones");
         } else if (source == btnTiquetes) {
-            JOptionPane.showMessageDialog(this, "Abrir módulo de tiquetes");
+        	new VentanaTiquetes(administrador);
+        	 dispose();
         } else if (source == btnTemporadas) {
-            JOptionPane.showMessageDialog(this, "Abrir módulo de temporadas");
+            new VentanaCrearTemporada();
         } else if (source == btnCerrarSesion) {
             new FPrincipal(); 
             dispose();
