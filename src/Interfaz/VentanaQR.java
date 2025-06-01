@@ -1,16 +1,11 @@
 package Interfaz;
-
+ 
 import Tiquetes.Tiquete;
-import com.google.zxing.*;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import javax.swing.*;
 
 public class VentanaQR extends JFrame {
 
