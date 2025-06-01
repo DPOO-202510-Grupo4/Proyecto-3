@@ -80,6 +80,10 @@ public class FPrincipal extends JFrame implements ActionListener{
 
         setVisible(true);
     }
+    
+    public static void main(String[] args) {
+        new FPrincipal();
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
