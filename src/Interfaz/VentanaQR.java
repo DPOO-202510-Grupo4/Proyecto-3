@@ -9,22 +9,23 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Random;
 
 public class VentanaQR extends JFrame {
 
     public VentanaQR(Tiquete tiquete) {
         setTitle("Tiquete Parque");
-        setSize(800, 300); 
+        setSize(800, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Precio aleatorio entre 35 y 65
+        int precio = new Random().nextInt(31) + 35;
 
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10)) {
             @Override
@@ -42,7 +43,7 @@ public class VentanaQR extends JFrame {
         panelPrincipal.add(titulo, BorderLayout.NORTH);
 
         JPanel panelCentro = new JPanel(new BorderLayout(20, 0));
-        panelCentro.setOpaque(false); 
+        panelCentro.setOpaque(false);
 
         JLabel qrLabel = new JLabel();
         try {
@@ -54,11 +55,12 @@ public class VentanaQR extends JFrame {
                     "\nCategoría: " + tiquete.getCategoria().getNombre() +
                     "\nFecha impresión: " + fechaActual;
 
+
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 
             BitMatrix matrix = new MultiFormatWriter()
-                .encode(contenido, BarcodeFormat.QR_CODE, 150, 150, hints);
+                    .encode(contenido, BarcodeFormat.QR_CODE, 150, 150, hints);
             ImageIcon icon = new ImageIcon(MatrixToImageWriter.toBufferedImage(matrix));
 
             JPanel qrPanel = new JPanel();
@@ -76,11 +78,10 @@ public class VentanaQR extends JFrame {
         imagenLabel.setPreferredSize(new Dimension(200, 150));
 
         try {
-            ImageIcon img = new ImageIcon("ruta/a/tu/imagen.png");
+            ImageIcon img = new ImageIcon("img/TitleBG.png");
             Image escalar = img.getImage().getScaledInstance(180, 120, Image.SCALE_SMOOTH);
             imagenLabel.setIcon(new ImageIcon(escalar));
         } catch (Exception e) {
-            imagenLabel.setText("Aquí va tu imagen PNG");
             imagenLabel.setForeground(Color.WHITE);
         }
 
@@ -89,30 +90,39 @@ public class VentanaQR extends JFrame {
         JPanel panelInfo = new JPanel();
         panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
         panelInfo.setOpaque(false);
-        panelInfo.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE, 2), "Información", 0, 0, new Font("Arial", Font.BOLD, 14), Color.WHITE));
+        panelInfo.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 2),
+                "",
+                0, 0,
+                new Font("Arial", Font.BOLD, 14),
+                Color.WHITE));
 
         JLabel lblId = new JLabel("ID: " + tiquete.getId());
         JLabel lblCategoria = new JLabel("Categoría: " + tiquete.getCategoria().getNombre());
         JLabel lblFecha = new JLabel("Fecha impresión: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+        JLabel lblPrecio = new JLabel("Precio: $" + precio);
 
         Font infoFont = new Font("Arial", Font.PLAIN, 16);
         Color textColor = Color.WHITE;
         lblId.setFont(infoFont);
         lblCategoria.setFont(infoFont);
         lblFecha.setFont(infoFont);
+        lblPrecio.setFont(infoFont);
 
         lblId.setForeground(textColor);
         lblCategoria.setForeground(textColor);
         lblFecha.setForeground(textColor);
+        lblPrecio.setForeground(textColor);
 
         panelInfo.add(lblId);
         panelInfo.add(Box.createVerticalStrut(10));
         panelInfo.add(lblCategoria);
         panelInfo.add(Box.createVerticalStrut(10));
         panelInfo.add(lblFecha);
+        panelInfo.add(Box.createVerticalStrut(10));
+        panelInfo.add(lblPrecio);
 
         panelCentro.add(panelInfo, BorderLayout.EAST);
-
         panelPrincipal.add(panelCentro, BorderLayout.CENTER);
 
         add(panelPrincipal);

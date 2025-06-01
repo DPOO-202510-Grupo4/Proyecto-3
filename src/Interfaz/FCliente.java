@@ -11,7 +11,6 @@ import java.util.*;
 import javax.swing.*;
 import restricciones.*;
 
-
 public class FCliente extends JFrame implements ActionListener {
     
     private Cliente cliente;
@@ -20,7 +19,7 @@ public class FCliente extends JFrame implements ActionListener {
         this.cliente = cliente;
 
         setTitle("Panel del Cliente");
-        setSize(700, 700);
+        setSize(900, 600);
         setLocationRelativeTo(null);
         setIconImage(Toolkit.getDefaultToolkit().getImage("img/TitleBG.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,23 +30,28 @@ public class FCliente extends JFrame implements ActionListener {
         add(lblBienvenida, BorderLayout.NORTH);
 
         JPanel panelBotones = new JPanel();
-        panelBotones.setLayout(new GridLayout(6, 1, 10, 10)); 
-        add(panelBotones, BorderLayout.CENTER);
+        panelBotones.setLayout(new GridLayout(6, 1, 15, 15)); 
+        panelBotones.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100)); 
+        panelBotones.setBackground(Color.WHITE); 
 
-        JButton btnComprarTiquete = new JButton("Comprar Tiquete");
-        JButton btnConsultarTiquetes = new JButton("Mis Tiquetes");
-        JButton btnConsultarEspectaculos = new JButton("Consultar Espectáculos");
-        JButton btnConsultarAtracciones = new JButton("Consultar Atracciones");
-        JButton btnImprimirTiquetes = new JButton("Imprimir Tiquetes");
-        JButton btnCerrarSesion = new JButton("Cerrar sesión");
+        Color colorLima = new Color(202, 252, 5);
+        Font fontBotones = new Font("Arial", Font.BOLD, 14);
+
+        JButton btnComprarTiquete = crearBoton("Comprar Tiquete", colorLima, fontBotones);
+        JButton btnConsultarTiquetes = crearBoton("Mis Tiquetes", colorLima, fontBotones);
+        JButton btnConsultarEspectaculos = crearBoton("Consultar Espectáculos", colorLima, fontBotones);
+        JButton btnConsultarAtracciones = crearBoton("Consultar Atracciones", colorLima, fontBotones);
+        JButton btnImprimirTiquetes = crearBoton("Imprimir Tiquetes", colorLima, fontBotones);
+        JButton btnCerrarSesion = crearBoton("Cerrar sesión", colorLima, fontBotones);
 
         panelBotones.add(btnConsultarAtracciones);
-        btnConsultarAtracciones.setFocusPainted(false);
         panelBotones.add(btnConsultarEspectaculos);
         panelBotones.add(btnComprarTiquete);
         panelBotones.add(btnConsultarTiquetes);
         panelBotones.add(btnImprimirTiquetes);
         panelBotones.add(btnCerrarSesion);
+
+        add(panelBotones, BorderLayout.CENTER);
 
         btnComprarTiquete.addActionListener(e -> mostrarDialogoCompra());
         btnConsultarTiquetes.addActionListener(e -> mostrarTiquetes());
@@ -60,6 +64,15 @@ public class FCliente extends JFrame implements ActionListener {
         });
 
         setVisible(true);
+    }
+
+    private JButton crearBoton(String texto, Color bgColor, Font font) {
+        JButton boton = new JButton(texto);
+        boton.setBackground(bgColor);
+        boton.setOpaque(true);
+        boton.setFocusPainted(false);
+        boton.setFont(font);
+        return boton;
     }
 
     private void imprimirTiqueteQR() {
