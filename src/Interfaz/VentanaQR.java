@@ -1,42 +1,42 @@
 package Interfaz;
- 
+
 import Tiquetes.Tiquete;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+
+import javax.swing.*;
 import java.awt.*;
-import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.*;
+import java.util.HashMap;
 
 public class VentanaQR extends JFrame {
 
     public VentanaQR(Tiquete tiquete) {
         setTitle("Tiquete Parque");
-        setSize(800, 300); // Más ancho para un tiquete horizontal
+        setSize(800, 300); 
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Panel principal con fondo rojo (color de tiquete)
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10)) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.setColor(new Color(200, 0, 0)); // Rojo fuerte
+                g.setColor(new Color(200, 0, 0));
                 g.fillRect(0, 0, getWidth(), getHeight());
             }
         };
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Título centrado en blanco
         JLabel titulo = new JLabel("TIQUETE PARQUE", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 26));
         titulo.setForeground(Color.WHITE);
         panelPrincipal.add(titulo, BorderLayout.NORTH);
 
-        // Panel central que contiene QR, imagen y datos
         JPanel panelCentro = new JPanel(new BorderLayout(20, 0));
-        panelCentro.setOpaque(false); // Transparente para mostrar fondo rojo
+        panelCentro.setOpaque(false); 
 
-        // QR con marco
         JLabel qrLabel = new JLabel();
         try {
             Date ahora = new Date();
@@ -68,7 +68,7 @@ public class VentanaQR extends JFrame {
 
         // Cargar imagen (puedes cambiar la ruta)
         try {
-            ImageIcon img = new ImageIcon("img/TitleBG.png");
+            ImageIcon img = new ImageIcon("ruta/a/tu/imagen.png");
             Image escalar = img.getImage().getScaledInstance(180, 120, Image.SCALE_SMOOTH);
             imagenLabel.setIcon(new ImageIcon(escalar));
         } catch (Exception e) {
