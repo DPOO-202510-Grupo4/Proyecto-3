@@ -1,10 +1,22 @@
 package Interfaz;
 
 import Tiquetes.Tiquete;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.*;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class VentanaQR extends JFrame {
 
@@ -42,26 +54,27 @@ public class VentanaQR extends JFrame {
                     "\nCategoría: " + tiquete.getCategoria().getNombre() +
                     "\nFecha impresión: " + fechaActual;
 
-            //BitMatrix matrix = new MultiFormatWriter().encode(contenido, BarcodeFormat.QR_CODE, 150, 150, new HashMap<>());
-            //ImageIcon icon = new ImageIcon(MatrixToImageWriter.toBufferedImage(matrix));
+            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 
-            // Marco para el QR
+            BitMatrix matrix = new MultiFormatWriter()
+                .encode(contenido, BarcodeFormat.QR_CODE, 150, 150, hints);
+            ImageIcon icon = new ImageIcon(MatrixToImageWriter.toBufferedImage(matrix));
+
             JPanel qrPanel = new JPanel();
             qrPanel.setBackground(Color.WHITE);
             qrPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-            //qrPanel.add(new JLabel(icon));
+            qrPanel.add(new JLabel(icon));
 
             panelCentro.add(qrPanel, BorderLayout.WEST);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error generando QR: " + ex.getMessage());
         }
 
-        // Panel para imagen PNG (centro del tiquete)
         JLabel imagenLabel = new JLabel();
         imagenLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imagenLabel.setPreferredSize(new Dimension(200, 150)); // Espacio reservado
+        imagenLabel.setPreferredSize(new Dimension(200, 150));
 
-        // Cargar imagen (puedes cambiar la ruta)
         try {
             ImageIcon img = new ImageIcon("ruta/a/tu/imagen.png");
             Image escalar = img.getImage().getScaledInstance(180, 120, Image.SCALE_SMOOTH);
@@ -73,10 +86,9 @@ public class VentanaQR extends JFrame {
 
         panelCentro.add(imagenLabel, BorderLayout.CENTER);
 
-        // Información a la derecha
         JPanel panelInfo = new JPanel();
         panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
-        panelInfo.setOpaque(false); // Fondo transparente
+        panelInfo.setOpaque(false);
         panelInfo.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE, 2), "Información", 0, 0, new Font("Arial", Font.BOLD, 14), Color.WHITE));
 
         JLabel lblId = new JLabel("ID: " + tiquete.getId());
