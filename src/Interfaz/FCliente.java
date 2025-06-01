@@ -61,7 +61,7 @@ public class FCliente extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void mostrarDialogoCompra() {
+    public void mostrarDialogoCompra() {
         GestorTiquetes gestor = GestorTiquetes.getInstancia();
         ArrayList<CategoriaTiquete> categorias = gestor.getCategoriasDisponibles();
 
