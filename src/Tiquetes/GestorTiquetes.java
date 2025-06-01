@@ -43,7 +43,24 @@ public class GestorTiquetes {
     // ======================
     // Gestión de TIQUETES
     // ======================
+    public static String generarID(String nombreCategoria) {
+        if (nombreCategoria == null || nombreCategoria.isEmpty()) {
+            return generarNumerosAleatorios(7);  // Solo números si no hay categoría
+        }
 
+        char primeraLetra = nombreCategoria.charAt(0);  // la primera letra
+        String numeros = generarNumerosAleatorios(7);
+        return Character.toUpperCase(primeraLetra) + numeros;
+    }
+
+    private static String generarNumerosAleatorios(int longitud) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < longitud; i++) {
+            int num = (int)(Math.random() * 10);
+            sb.append(num);
+        }
+        return sb.toString();
+    }
 
     public Tiquete crearTiqueteTemporada(Cliente cliente, String nombreCategoria, Temporada temporada ) {
     	ArrayList<CategoriaTiquete> categorias = getCategoriasDisponibles();
@@ -59,8 +76,8 @@ public class GestorTiquetes {
             System.out.println("Categoría no encontrada: " + nombreCategoria);
             return null;
         }
-    	
-        TiqueteTemporada t = new TiqueteTemporada("Tiquete " + categoria.getNombre(), categoria.getPrecioBase() , UUID.randomUUID().toString(), categoria, false,cliente, temporada);
+        String id = generarID(categoria.getNombre());
+        TiqueteTemporada t = new TiqueteTemporada("Tiquete " + categoria.getNombre(), categoria.getPrecioBase() , id, categoria, false,cliente, temporada);
         
         PersistenciaTiqueteTemporada.persistencia(t);
         agregarTiqueteACliente(cliente, t);
@@ -105,11 +122,11 @@ public class GestorTiquetes {
             System.out.println("Categoría no encontrada: " + nombreCategoria);
             return null;
         }
-
+        String id = generarID(categoria.getNombre());
         TiqueteRegular t = new TiqueteRegular(
             "Tiquete " + categoria.getNombre(),
             categoria.getPrecioBase(),
-            UUID.randomUUID().toString(),
+            id,
             categoria,
             false,
             cliente,

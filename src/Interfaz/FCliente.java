@@ -53,6 +53,7 @@ public class FCliente extends JFrame implements ActionListener {
         btnConsultarTiquetes.addActionListener(e -> mostrarTiquetes());
         btnConsultarEspectaculos.addActionListener(e -> mostrarEspectaculos());
         btnConsultarAtracciones.addActionListener(e -> mostrarAtracciones());
+        btnImprimirTiquetes.addActionListener(e -> imprimirTiqueteQR());
         btnCerrarSesion.addActionListener(e -> {
             dispose();
             new FLogin();
@@ -61,7 +62,34 @@ public class FCliente extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public void mostrarDialogoCompra() {
+    private void imprimirTiqueteQR() {
+        ArrayList<Tiquete> tiquetes = cliente.getTiquetes();
+
+        if (tiquetes.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No tienes tiquetes para imprimir.");
+            return;
+        }
+
+        String[] opciones = new String[tiquetes.size()];
+        for (int i = 0; i < tiquetes.size(); i++) {
+            Tiquete t = tiquetes.get(i);
+            opciones[i] = "ID: " + t.getId() + " - " + t.getCategoria().getNombre();
+        }
+
+        String seleccion = (String) JOptionPane.showInputDialog(this, "Seleccione un tiquete:",
+                "Imprimir QR", JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+
+        if (seleccion == null) return;
+
+        for (Tiquete t : tiquetes) {
+            if (seleccion.contains(String.valueOf(t.getId()))) {
+                new VentanaQR(t);
+                break;
+            }
+        }
+    }
+
+	public void mostrarDialogoCompra() {
         GestorTiquetes gestor = GestorTiquetes.getInstancia();
         ArrayList<CategoriaTiquete> categorias = gestor.getCategoriasDisponibles();
 
