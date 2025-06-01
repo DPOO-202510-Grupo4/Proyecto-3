@@ -1,15 +1,10 @@
 package Interfaz;
 
 import Tiquetes.Tiquete;
-import com.google.zxing.*;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-
-import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import javax.swing.*;
 
 public class VentanaQR extends JFrame {
 
@@ -47,14 +42,14 @@ public class VentanaQR extends JFrame {
                     "\nCategoría: " + tiquete.getCategoria().getNombre() +
                     "\nFecha impresión: " + fechaActual;
 
-            BitMatrix matrix = new MultiFormatWriter().encode(contenido, BarcodeFormat.QR_CODE, 150, 150, new HashMap<>());
-            ImageIcon icon = new ImageIcon(MatrixToImageWriter.toBufferedImage(matrix));
+            //BitMatrix matrix = new MultiFormatWriter().encode(contenido, BarcodeFormat.QR_CODE, 150, 150, new HashMap<>());
+            //ImageIcon icon = new ImageIcon(MatrixToImageWriter.toBufferedImage(matrix));
 
             // Marco para el QR
             JPanel qrPanel = new JPanel();
             qrPanel.setBackground(Color.WHITE);
             qrPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-            qrPanel.add(new JLabel(icon));
+            //qrPanel.add(new JLabel(icon));
 
             panelCentro.add(qrPanel, BorderLayout.WEST);
         } catch (Exception ex) {

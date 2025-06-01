@@ -24,6 +24,7 @@ public class GestorPersonas {
         this.administradores = new ArrayList<>();
 	    this.turnos = new ArrayList<>();
 	    this.tareas = new ArrayList<>();
+        
     }
 
     public static GestorPersonas getInstance() {

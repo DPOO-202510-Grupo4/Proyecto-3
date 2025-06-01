@@ -3,6 +3,7 @@ package Interfaz;
 import Persistencias.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.ParseException;
 import javax.swing.*;
 
 
@@ -79,10 +80,6 @@ public class FPrincipal extends JFrame implements ActionListener{
         });
 
         setVisible(true);
-    }
-    
-    public static void main(String[] args) {
-        new FPrincipal();
     }
 
     @Override
