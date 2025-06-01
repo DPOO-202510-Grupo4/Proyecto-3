@@ -6,10 +6,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class FLogin extends JFrame implements ActionListener{
-    
-    public FLogin() {
+public class FLogin extends JFrame implements ActionListener {
 
+    public FLogin() {
         setTitle("Iniciar Sesión");
         setSize(400, 250);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -39,46 +38,44 @@ public class FLogin extends JFrame implements ActionListener{
 
         setVisible(true);
 
-        botonIngresar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String login = campoUsuario.getText();
-                String contrasena = new String(campoContrasena.getPassword());
+        botonIngresar.addActionListener(e -> {
+            String login = campoUsuario.getText();
+            String contrasena = new String(campoContrasena.getPassword());
 
-                GestorPersonas gestor = GestorPersonas.getInstance();
-                GestorPersonas.TipoUsuario tipo = gestor.validarLogin(login, contrasena);
+            GestorPersonas gestor = GestorPersonas.getInstance();
+            GestorPersonas.TipoUsuario tipo = gestor.validarLogin(login, contrasena);
 
-                switch (tipo) {
-                    case ADMINISTRADOR:
-                        JOptionPane.showMessageDialog(null, "Bienvenido Administrador");
-                        // new FAdministrador(); // si ya lo tienes
-                        break;
-                    case EMPLEADO:
-                        JOptionPane.showMessageDialog(null, "Bienvenido Empleado");
-                        // new FEmpleado(); // si ya lo tienes
-                        break;
-                    case CLIENTE:
-                        Cliente cliente = gestor.buscarCliente(login);
-                        if (cliente != null) {
-                            JOptionPane.showMessageDialog(null, "Bienvenido Cliente");
-                            dispose(); // cerrar ventana actual
-                            new FCliente(cliente); // aquí está el cambio importante
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Error al obtener el cliente.");
-                        }
-                        break;
-                    case NO_ENCONTRADO:
-                        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.");
-                        break;
-                }
+            switch (tipo) {
+                /*case ADMINISTRADOR:
+                    JOptionPane.showMessageDialog(null, "Bienvenido Administrador");
+                    dispose();
+                    new FAdministrador(); 
+                    break; */
+                /*case EMPLEADO:
+                    JOptionPane.showMessageDialog(null, "Bienvenido Empleado");
+                    Empleado empleado = gestor.buscarEmpleado(login); 
+                    if (empleado != null) {
+                        dispose();
+                        new FEmpleado(empleado); 
+                    }
+                    break; */
+                case CLIENTE:
+                    JOptionPane.showMessageDialog(null, "Bienvenido Cliente");
+                    Cliente cliente = gestor.buscarCliente(login);
+                    if (cliente != null) {
+                        dispose();
+                        new FCliente(cliente);
+                    }
+                    break;
+                case NO_ENCONTRADO:
+                    JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.");
+                    break;
             }
         });
 
-
-        botonVolver.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new FPrincipal();
-                dispose();
-            }
+        botonVolver.addActionListener(e -> {
+            new FPrincipal();
+            dispose();
         });
     }
 

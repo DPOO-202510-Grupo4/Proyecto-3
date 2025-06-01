@@ -1,11 +1,5 @@
 package Persona;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-
 public abstract class Persona {
  protected String nombre;
  protected String login;
@@ -51,5 +45,5 @@ public String getFechaNacimiento() {
 public void setFechaNacimiento(String fechaNacimiento) {
 	this.fechaNacimiento = fechaNacimiento;
 }
- 
+
 }
