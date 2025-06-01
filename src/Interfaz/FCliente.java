@@ -20,29 +20,34 @@ public class FCliente extends JFrame implements ActionListener {
         this.cliente = cliente;
 
         setTitle("Panel del Cliente");
-        setSize(700, 500);
+        setSize(700, 700);
         setLocationRelativeTo(null);
         setIconImage(Toolkit.getDefaultToolkit().getImage("img/TitleBG.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(6, 1, 10, 10));
+        setLayout(new BorderLayout(10, 10));
 
         JLabel lblBienvenida = new JLabel("Bienvenido, " + cliente.getNombre(), SwingConstants.CENTER);
         lblBienvenida.setFont(new Font("Arial", Font.BOLD, 18));
-        add(lblBienvenida);
+        add(lblBienvenida, BorderLayout.NORTH);
+
+        JPanel panelBotones = new JPanel();
+        panelBotones.setLayout(new GridLayout(6, 1, 10, 10)); 
+        add(panelBotones, BorderLayout.CENTER);
 
         JButton btnComprarTiquete = new JButton("Comprar Tiquete");
-        JButton btnConsultarTiquetes = new JButton("Consultar Tiquetes");
+        JButton btnConsultarTiquetes = new JButton("Mis Tiquetes");
         JButton btnConsultarEspectaculos = new JButton("Consultar Espectáculos");
         JButton btnConsultarAtracciones = new JButton("Consultar Atracciones");
         JButton btnImprimirTiquetes = new JButton("Imprimir Tiquetes");
         JButton btnCerrarSesion = new JButton("Cerrar sesión");
 
-        add(btnComprarTiquete);
-        add(btnConsultarTiquetes);
-        add(btnConsultarEspectaculos);
-        add(btnConsultarAtracciones);
-        add(btnImprimirTiquetes);
-        add(btnCerrarSesion);
+        panelBotones.add(btnConsultarAtracciones);
+        btnConsultarAtracciones.setFocusPainted(false);
+        panelBotones.add(btnConsultarEspectaculos);
+        panelBotones.add(btnComprarTiquete);
+        panelBotones.add(btnConsultarTiquetes);
+        panelBotones.add(btnImprimirTiquetes);
+        panelBotones.add(btnCerrarSesion);
 
         btnComprarTiquete.addActionListener(e -> mostrarDialogoCompra());
         btnConsultarTiquetes.addActionListener(e -> mostrarTiquetes());
