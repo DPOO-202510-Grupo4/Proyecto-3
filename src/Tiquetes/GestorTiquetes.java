@@ -164,6 +164,7 @@ public class GestorTiquetes {
         	usarTiquete(t);
         }
     }
+    
     public FastPass crearFastPass(String nombre, Double precioBase, Date fecha, boolean usado, String idTiquete,String dueño) {
     	GestorPersonas gestor = GestorPersonas.getInstance();
         FastPass fastPass = new FastPass(nombre, precioBase, fecha, usado, idTiquete,dueño);

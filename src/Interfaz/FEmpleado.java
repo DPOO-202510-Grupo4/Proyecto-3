@@ -3,78 +3,77 @@ package Interfaz;
 import Atracciones.*;
 import Persona.*;
 import Tiquetes.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import restricciones.Temporada;
+
 import javax.swing.*;
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-
-public class FEmpleado extends JFrame implements ActionListener {
+public class FEmpleado extends JFrame {
     private Empleado empleado;
 
     public FEmpleado(Empleado empleado) {
         this.empleado = empleado;
-        setTitle("Panel de Empleado"); 
-        setSize(400, 300);
+        setTitle("Panel del Empleado");
+        setSize(900, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(6,1,10,10));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("img/TitleBG.png"));
 
-        JButton btnTurnos = new JButton("Consultar Turnos");
-        JButton btnTareas = new JButton("Consultar Tareas");
-        JButton btnCapacitaciones = new JButton("Consultar Capacitaciones");
-        JButton btnRegistrarVenta = new JButton("Registrar Venta");
-        JButton btnRegistrarTiquete = new JButton("Registrar Tiquete");
-        JButton btnCerrar = new JButton("Cerrar Sesión");
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        panel.add(btnTurnos);
-        panel.add(btnTareas);
-        panel.add(btnCapacitaciones);
-        panel.add(btnRegistrarVenta);
-        panel.add(btnRegistrarTiquete);
-        panel.add(btnCerrar);
+        JLabel label = new JLabel("Bienvenido, " + empleado.getNombre(), SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        panelPrincipal.add(label, BorderLayout.NORTH);
 
-        add(panel);
+        try {
+            ImageIcon img = new ImageIcon("img/TitleBG.png");
+            JLabel imagenCentral = new JLabel(new ImageIcon(img.getImage().getScaledInstance(200, 150, Image.SCALE_SMOOTH)));
+            imagenCentral.setHorizontalAlignment(SwingConstants.CENTER);
+            panelPrincipal.add(imagenCentral, BorderLayout.CENTER);
+        } catch (Exception e) {
+            JLabel fallback = new JLabel("Imagen no disponible", SwingConstants.CENTER);
+            fallback.setFont(new Font("Arial", Font.ITALIC, 14));
+            panelPrincipal.add(fallback, BorderLayout.CENTER);
+        }
 
-        //btnTurnos.addActionListener(e -> mostrarTurnos());
-        //btnTareas.addActionListener(e -> mostrarTareas());
+        JButton btnCapacitaciones = crearBotonEstilizado("Ver Capacitaciones");
+        JButton btnRegistrarVenta = crearBotonEstilizado("Vender Tiquete");
+        JButton btnRegistrarTiquete = crearBotonEstilizado("Validar Tiquete");
+        JButton btnCerrar = crearBotonEstilizado("Cerrar Sesión");
+
+        JPanel panelBotones = new JPanel(new GridLayout(2, 2, 10, 10));
+        panelBotones.add(btnCapacitaciones);
+        panelBotones.add(btnRegistrarVenta);
+        panelBotones.add(btnRegistrarTiquete);
+        panelBotones.add(btnCerrar);
+
+        panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
+        add(panelPrincipal);
+
         btnCapacitaciones.addActionListener(e -> mostrarCapacitaciones());
         btnRegistrarVenta.addActionListener(e -> registrarVenta());
         btnRegistrarTiquete.addActionListener(e -> registrarTiquete());
         btnCerrar.addActionListener(e -> {
             dispose();
-            new FLogin().setVisible(true);
+            new FPrincipal().setVisible(true);
         });
-    }   
 
-    /* private void mostrarTurnos() {
-        ArrayList<Turno> turnos = GestorPersonas.getInstance().turnosDeEmpleado(empleado);
-        if (turnos.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No tienes turnos asignados.");
-            return;
-        }
-        StringBuilder sb = new StringBuilder("Tus turnos:\n");
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        for (Turno t : turnos) {
-            sb.append("- ").append(sdf.format(t.getInicio())).append(" a ").append(sdf.format(t.getFin())).append("\n");
-        }
-        JOptionPane.showMessageDialog(this, sb.toString());
+        setVisible(true);
     }
 
-    private void mostrarTareas() {
-        ArrayList<String> tareas = empleado.getTareas();
-        if (tareas.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No tienes tareas asignadas.");
-            return;
-        }
-        StringBuilder sb = new StringBuilder("Tus tareas:\n");
-        for (String t : tareas) {
-            sb.append("- ").append(t).append("\n");
-        }
-        JOptionPane.showMessageDialog(this, sb.toString());
-    } */
+    private JButton crearBotonEstilizado(String texto) {
+        JButton boton = new JButton(texto);
+        boton.setPreferredSize(new Dimension(150, 40));
+        boton.setBackground(new Color(202, 252, 5));
+        boton.setOpaque(true);
+        boton.setFocusPainted(false);
+        boton.setFont(new Font("Arial", Font.BOLD, 14));
+        return boton;
+    }
 
     private void mostrarCapacitaciones() {
         Capacitaciones c = empleado.getCapacitaciones();
@@ -90,55 +89,96 @@ public class FEmpleado extends JFrame implements ActionListener {
             sb.append("- ").append(a.getNombre()).append("\n");
         }
         JOptionPane.showMessageDialog(this, sb.toString());
-    } 
+    }
 
     private void registrarVenta() {
         GestorPersonas gestorPersonas = GestorPersonas.getInstance();
-        HashMap<String, Cliente> clientesMap = gestorPersonas.getClientes();
+        String login = JOptionPane.showInputDialog(this, "Ingrese el login del cliente:");
 
-        if (clientesMap.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No hay clientes registrados.");
-            return;
-        }
+        if (login == null || login.isBlank()) return;
 
-        ArrayList<Cliente> clientes = new ArrayList<>(clientesMap.values());
-
-        String[] nombresClientes = new String[clientes.size()];
-        for (int i = 0; i < clientes.size(); i++) {
-            nombresClientes[i] = clientes.get(i).getNombre();
-        }
-
-        String nombreSeleccionado = (String) JOptionPane.showInputDialog(
-            this,
-            "Seleccione un cliente:",
-            "Seleccionar Cliente",
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            nombresClientes,
-            nombresClientes[0]
-        );
-
-        if (nombreSeleccionado == null) {
-            return;
-        }
-
-        Cliente clienteSeleccionado = null;
-        for (Cliente c : clientes) {
-            if (c.getNombre().equals(nombreSeleccionado)) {
-                clienteSeleccionado = c;
-                break;
-            }
-        }
-
-        if (clienteSeleccionado == null) {
+        Cliente cliente = gestorPersonas.buscarCliente(login);
+        if (cliente == null) {
             JOptionPane.showMessageDialog(this, "Cliente no encontrado.");
             return;
         }
 
-        FCliente ventanaCliente = new FCliente(clienteSeleccionado);
-        ventanaCliente.mostrarDialogoCompra();
-    }
+        GestorTiquetes gestor = GestorTiquetes.getInstancia();
+        ArrayList<CategoriaTiquete> categorias = gestor.getCategoriasDisponibles();
 
+        if (categorias.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay categorías disponibles.");
+            return;
+        }
+
+        String[] tipos = {"Regular", "Temporada"};
+        int tipo = JOptionPane.showOptionDialog(this, "Tipo de tiquete:", "Compra",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, tipos, tipos[0]);
+        if (tipo == -1) return;
+
+        ArrayList<String> nombresCategorias = new ArrayList<>();
+        for (CategoriaTiquete cat : categorias) {
+            if (tipo == 1 && cat.getNombre().equalsIgnoreCase("Básico")) {
+                continue;
+            }
+            nombresCategorias.add(cat.getNombre());
+        }
+
+        if (nombresCategorias.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay categorías disponibles para este tipo.");
+            return;
+        }
+
+        String[] opcionesCategorias = nombresCategorias.toArray(new String[0]);
+        String categoria = (String) JOptionPane.showInputDialog(this, "Seleccione categoría:",
+                "Categoría", JOptionPane.QUESTION_MESSAGE, null, opcionesCategorias, opcionesCategorias[0]);
+        if (categoria == null) return;
+
+        if (tipo == 0) { // Regular
+            String fechaStr = JOptionPane.showInputDialog(this, "Ingrese fecha (dd/MM/yyyy):");
+            if (fechaStr == null) return;
+
+            try {
+                Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaStr);
+                gestor.crearTiqueteRegular(cliente, categoria, fecha);
+                JOptionPane.showMessageDialog(this, "¡Tiquete regular creado!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Fecha inválida.");
+            }
+
+        } else { // Temporada
+            ArrayList<Temporada> temporadas = gestor.getTemporadas();
+
+            if (temporadas.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay temporadas disponibles.");
+                return;
+            }
+
+            ArrayList<String> nombresTemporadas = new ArrayList<>();
+            for (Temporada t : temporadas) {
+                nombresTemporadas.add(t.getName());
+            }
+
+            String[] opcionesTemporadas = nombresTemporadas.toArray(new String[0]);
+            String seleccion = (String) JOptionPane.showInputDialog(this, "Seleccione temporada:",
+                    "Temporada", JOptionPane.QUESTION_MESSAGE, null, opcionesTemporadas, opcionesTemporadas[0]);
+            if (seleccion == null) return;
+
+            Temporada temporadaSeleccionada = null;
+            for (Temporada t : temporadas) {
+                if (t.getName().equals(seleccion)) {
+                    temporadaSeleccionada = t;
+                    break;
+                }
+            }
+
+            if (temporadaSeleccionada == null) return;
+
+            gestor.crearTiqueteTemporada(cliente, categoria, temporadaSeleccionada);
+            JOptionPane.showMessageDialog(this, "¡Tiquete de temporada creado!");
+        }
+    }
 
 
     private void registrarTiquete() {
@@ -147,16 +187,12 @@ public class FEmpleado extends JFrame implements ActionListener {
 
         GestorTiquetes gestor = GestorTiquetes.getInstancia();
         Tiquete t = gestor.buscarTiquetePorId(id);
+        System.out.println(t);
         if (t == null) {
             JOptionPane.showMessageDialog(this, "Tiquete no encontrado.");
         } else {
             gestor.usarTiquete(t);
             JOptionPane.showMessageDialog(this, "Tiquete registrado como usado.");
         }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

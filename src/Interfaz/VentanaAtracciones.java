@@ -46,8 +46,7 @@ public class VentanaAtracciones extends JFrame {
         });
 
         btnConsultarAtracciones.addActionListener(e -> {
-            new VentanaConsultaAtracciones(administrador);
-            dispose();
+
         });
 
         btnRegistrarMecanica.addActionListener(e -> {

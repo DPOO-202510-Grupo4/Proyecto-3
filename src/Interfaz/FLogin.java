@@ -34,7 +34,6 @@ public class FLogin extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(botones, BorderLayout.SOUTH);
 
-        // Acción para botón Ingresar
         botonIngresar.addActionListener(e -> {
             String login = campoUsuario.getText();
             String contrasena = new String(campoContrasena.getPassword());
@@ -50,7 +49,7 @@ public class FLogin extends JFrame {
                         dispose();
                         new FAdministrador(administrador); 
                     } else {
-                        JOptionPane.showMessageDialog(this, "Empleado no encontrado.");
+                        JOptionPane.showMessageDialog(this, "Administrador no encontrado.");
                     }
                     dispose();
                     
@@ -60,7 +59,7 @@ public class FLogin extends JFrame {
                     Empleado empleado = gestor.obtenerEmpleadoPorLogin(login);
                     if (empleado != null) {
                         dispose();
-                        new FEmpleado(empleado); 
+                        new FEmpleado(empleado).setVisible(true); 
                     } else {
                         JOptionPane.showMessageDialog(this, "Empleado no encontrado.");
                     }
